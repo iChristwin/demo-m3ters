@@ -6,6 +6,12 @@ import { Button, Input } from "@nextui-org/react";
 import { NextUIProvider } from "@nextui-org/react";
 
 export default function Home() {
+  const [showSmallScreenMessage, setShowSmallScreenMessage] = useState(false);
+
+  useEffect(() => {
+    setShowSmallScreenMessage(window.innerWidth < 600);
+  }, []);
+
   const [seed, setSeed] = useState("");
   const [isPlaying, setIsPlaying] = useState(false);
   let intervalId; // Track interval ID for proper cleanup
@@ -32,7 +38,7 @@ export default function Home() {
           backgroundImage: "url('./Untitled Project 9.tif.webp",
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
-          backgroundPosition: "left bottom",
+          backgroundPosition: "center bottom",
         }}
       >
         <div className="dark bg-gradient-to-b from-gray-900/75 to-black flex min-h-screen flex-col items-center justify-between p-9">
@@ -51,127 +57,142 @@ export default function Home() {
               </a>
             </div>
           </div>
-          <div className="">
-            <div className="grid grid-cols-1 place-items-center justify-center">
-              <div>
-                <h2 className="capitalize text-2xl font-semibold">
-                  <M3terAlias seed={seed} />
-                </h2>
-              </div>{" "}
-              <M3terHead seed={seed} />
-            </div>
-            <div className="flex place-items-center gap-3">
-              <Input
-                style={{ borderWidth: "0px" }}
-                value={seed}
-                onChange={(event) => setSeed(event.target.value)}
-                id="seedInput"
-                placeholder="Type to generate..."
-                classNames={{
-                  nput: [
-                    "bg-transparent",
-                    "text-black/90 dark:text-white/90",
-                    "placeholder:text-default-700/50 dark:placeholder:text-white/60",
-                  ],
-                  innerWrapper: "bg-transparent",
-                  inputWrapper: [
-                    "shadow-xl",
-                    "bg-default-200/50",
-                    "dark:bg-default/60",
-                    "backdrop-blur-xl",
-                    "backdrop-saturate-200",
-                    "hover:bg-default-200/30",
-                    "dark:hover:bg-default/30",
-                    "group-data-[focused=true]:bg-default-200/50",
-                    "dark:group-data-[focused=true]:bg-default/60",
-                    "!cursor-text",
-                  ],
-                }}
+          {showSmallScreenMessage ? (
+            <p
+              style={{ marginBottom: "300px" }}
+              className="font-mono text-3xl font-semibold text-gray-400"
+            >
+              This page is best viewed on a larger screen. Please revisit later!
+            </p>
+          ) : (
+            <>
+              <div className="">
+                <div className="grid grid-cols-1 place-items-center justify-center">
+                  <div>
+                    <h2 className="capitalize text-2xl font-semibold">
+                      <M3terAlias seed={seed} />
+                    </h2>
+                  </div>{" "}
+                  <M3terHead seed={seed} />
+                </div>
+                <div className="flex place-items-center gap-3">
+                  <Input
+                    style={{ borderWidth: "0px" }}
+                    value={seed}
+                    onChange={(event) => setSeed(event.target.value)}
+                    id="seedInput"
+                    placeholder="Type to generate..."
+                    classNames={{
+                      nput: [
+                        "bg-transparent",
+                        "text-black/90 dark:text-white/90",
+                        "placeholder:text-default-700/50 dark:placeholder:text-white/60",
+                      ],
+                      innerWrapper: "bg-transparent",
+                      inputWrapper: [
+                        "shadow-xl",
+                        "bg-default-200/50",
+                        "dark:bg-default/60",
+                        "backdrop-blur-xl",
+                        "backdrop-saturate-200",
+                        "hover:bg-default-200/30",
+                        "dark:hover:bg-default/30",
+                        "group-data-[focused=true]:bg-default-200/50",
+                        "dark:group-data-[focused=true]:bg-default/60",
+                        "!cursor-text",
+                      ],
+                    }}
+                  />
+                  <Button
+                    color="primary"
+                    variant="ghost"
+                    onClick={handlePlayPause}
+                  >
+                    {isPlaying ? "Stop" : "Play"}
+                  </Button>
+                </div>
+              </div>
+              <ReactPlayer
+                url="https://music.youtube.com/playlist?list=PL0HcRLHfAYKAk0Dfzlgo1-OgQC-O1I9Ab&si=K1EXAE06PU-KrpsC"
+                playing={isPlaying}
+                width="0%"
+                height="0px"
+                loop={true}
+                volume={0.7}
+                controls={false}
               />
-              <Button color="primary" variant="ghost" onClick={handlePlayPause}>
-                {isPlaying ? "Stop" : "Play"}
-              </Button>
-            </div>
-          </div>
-          <ReactPlayer
-        url="https://music.youtube.com/playlist?list=PL0HcRLHfAYKAk0Dfzlgo1-OgQC-O1I9Ab&si=K1EXAE06PU-KrpsC"
-        playing={isPlaying}
-        width="0%"
-        height="0px"
-        loop={true}
-        volume={0.7}
-        controls={false}
-      />
-          <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-            <a
-              href="https://github.com/iChristwin/m3ters.js"
-              className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <h2 className={`mb-3 text-2xl font-semibold`}>
-                GitHub{" "}
-                <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-                  -&gt;
-                </span>
-              </h2>
-              <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-                Find in-depth information about m3ter.js features and API.
-              </p>
-            </a>
-            <a
-              href="https://www.npmjs.com/package/m3ters"
-              className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800 hover:dark:bg-opacity-30"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <h2 className={`mb-3 text-2xl font-semibold`}>
-                Install{" "}
-                <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-                  -&gt;
-                </span>
-              </h2>
-              <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-                To install m3ters.js <br />
-                <code style={{ backgroundColor: "#444" }}>
-                  npm i m3ters --save
-                </code>
-              </p>
-            </a>
-            <a
-              href="https://m3tering.whynotswitch.com"
-              className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <h2 className={`mb-3 text-2xl font-semibold`}>
-                About{" "}
-                <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-                  -&gt;
-                </span>
-              </h2>
-              <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-                Learn more about the M3tering Protocol, read the docs.
-              </p>
-            </a>
-            <a
-              href="https://discord.gg/Z4AyRjh7gW"
-              className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <h2 className={`mb-3 text-2xl font-semibold`}>
-                Join{" "}
-                <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-                  -&gt;
-                </span>
-              </h2>
-              <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-                Join the discord to connect with other{" "}
-                <code style={{ backgroundColor: "#444" }}>m3ter-heads</code>
-              </p>
-            </a>
-          </div>
+              <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
+                <a
+                  href="https://github.com/iChristwin/m3ters.js"
+                  className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <h2 className={`mb-3 text-2xl font-semibold`}>
+                    GitHub{" "}
+                    <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+                      -&gt;
+                    </span>
+                  </h2>
+                  <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
+                    Find in-depth information about m3ter.js features and API.
+                  </p>
+                </a>
+                <a
+                  href="https://www.npmjs.com/package/m3ters"
+                  className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800 hover:dark:bg-opacity-30"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <h2 className={`mb-3 text-2xl font-semibold`}>
+                    Install{" "}
+                    <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+                      -&gt;
+                    </span>
+                  </h2>
+                  <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
+                    To install m3ters.js <br />
+                    <code style={{ backgroundColor: "#444" }}>
+                      npm i m3ters --save
+                    </code>
+                  </p>
+                </a>
+                <a
+                  href="https://m3tering.whynotswitch.com"
+                  className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <h2 className={`mb-3 text-2xl font-semibold`}>
+                    About{" "}
+                    <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+                      -&gt;
+                    </span>
+                  </h2>
+                  <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
+                    Learn more about the M3tering Protocol, read the docs.
+                  </p>
+                </a>
+                <a
+                  href="https://discord.gg/Z4AyRjh7gW"
+                  className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <h2 className={`mb-3 text-2xl font-semibold`}>
+                    Join{" "}
+                    <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+                      -&gt;
+                    </span>
+                  </h2>
+                  <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
+                    Join the discord to connect with other{" "}
+                    <code style={{ backgroundColor: "#444" }}>m3ter-heads</code>
+                  </p>
+                </a>
+              </div>
+            </>
+          )}
         </div>
       </main>
     </NextUIProvider>

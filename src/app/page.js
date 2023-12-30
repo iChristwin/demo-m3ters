@@ -66,7 +66,7 @@ export default function Home() {
             </p>
           ) : (
             <>
-              <div className="">
+              <div style={{paddingTop: "150px", paddingBottom: "50px"}}>
                 <div className="grid grid-cols-1 place-items-center justify-center">
                   <div className=" bg-gray-500/25 rounded-full px-5">
                     <h2 className="capitalize text-2xl font-semibold">

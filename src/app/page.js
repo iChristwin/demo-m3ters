@@ -42,7 +42,7 @@ export default function Home() {
         }}
       >
         <div className="dark bg-gradient-to-b from-gray-900/75 to-black flex min-h-screen flex-col items-center justify-between p-9">
-          <div className="z-10 max-w-5xl w-full items-center justify-end font-mono text-sm lg:flex">
+          <div className="z-10 max-w-7xl w-full items-center justify-end font-mono text-sm lg:flex">
             <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
               <a
                 className="pointer-events-none flex place-items-center justify-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
@@ -68,11 +68,11 @@ export default function Home() {
             <>
               <div className="">
                 <div className="grid grid-cols-1 place-items-center justify-center">
-                  <div>
+                  <div className=" bg-gray-500/25 rounded-full px-5">
                     <h2 className="capitalize text-2xl font-semibold">
                       <M3terAlias seed={seed} />
                     </h2>
-                  </div>{" "}
+                  </div>
                   <M3terHead seed={seed} />
                 </div>
                 <div className="flex place-items-center gap-3">
@@ -102,13 +102,13 @@ export default function Home() {
                         "!cursor-text",
                       ],
                     }}
-                  />
+                  /> OR
                   <Button
                     color="primary"
                     variant="ghost"
                     onClick={handlePlayPause}
                   >
-                    {isPlaying ? "Stop" : "Play"}
+                    {isPlaying ? "Stop" : "Randomize"}
                   </Button>
                 </div>
               </div>

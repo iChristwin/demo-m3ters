@@ -14,19 +14,22 @@ export default function Home() {
 
   const [seed, setSeed] = useState("");
   const [isPlaying, setIsPlaying] = useState(false);
-  let intervalId; // Track interval ID for proper cleanup
+  let intervalId;
 
   useEffect(() => {
-    // Only start the interval if isPlaying is true
     if (isPlaying) {
       intervalId = setInterval(() => {
-        setSeed(Math.random().toString(36).substring(2, 7));
-      }, 450); // Update every 300 milliseconds
+        const buffer = new Uint8Array(20);
+        crypto.getRandomValues(buffer);
+        const randomHex = Array.from(buffer)
+          .map((byte) => byte.toString(16).padStart(2, "0"))
+          .join("");
+        setSeed("0x" + randomHex);
+      }, 450);
     }
 
-    // Cleanup function to clear the interval
     return () => clearInterval(intervalId);
-  }, [isPlaying]); // Run the effect when isPlaying changes
+  }, [isPlaying]);
 
   const handlePlayPause = () => {
     setIsPlaying(!isPlaying);

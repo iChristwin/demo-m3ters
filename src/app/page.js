@@ -66,9 +66,9 @@ export default function Home() {
             </p>
           ) : (
             <>
-              <div style={{paddingTop: "150px", paddingBottom: "50px"}}>
+              <div style={{ paddingTop: "150px", paddingBottom: "50px" }}>
                 <div className="grid grid-cols-1 place-items-center justify-center">
-                  <div className=" bg-gray-500/25 rounded-full px-5">
+                  <div className=" bg-gray-500/25 rounded-full px-4">
                     <h2 className="capitalize text-2xl font-semibold">
                       <M3terAlias seed={seed} />
                     </h2>
@@ -102,7 +102,8 @@ export default function Home() {
                         "!cursor-text",
                       ],
                     }}
-                  /> OR
+                  />
+                  OR
                   <Button
                     color="primary"
                     variant="ghost"

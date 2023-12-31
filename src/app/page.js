@@ -67,7 +67,7 @@ export default function Home() {
           {showSmallScreenMessage ? (
             <p
               style={{ marginBottom: "300px" }}
-              className="font-mono text-3xl font-semibold text-neutral-400"
+              className="font-mono text-3xl font-semibold text-neutral-300"
             >
               This page is best viewed on a larger screen. Please revisit later!
             </p>
@@ -82,7 +82,7 @@ export default function Home() {
                   </div>
                   <M3terHead seed={seed} />
                 </div>
-                <div className="flex text-white place-items-center gap-3">
+                <div className="flex text-neutral-300 place-items-center gap-3">
                   <Input
                     style={{ borderWidth: "0px" }}
                     value={seed}
@@ -93,8 +93,8 @@ export default function Home() {
                     classNames={{
                       input: [
                         "bg-transparent",
-                        "text-black/90 dark:text-white/90",
-                        "placeholder:text-default-700/50 dark:placeholder:text-white/60",
+                        "text-black/90 dark:text-neutral-300/90",
+                        "placeholder:text-default-700/50 dark:placeholder:text-neutral-300/60",
                       ],
                       innerWrapper: "bg-transparent",
                       inputWrapper: [
@@ -130,7 +130,7 @@ export default function Home() {
                 volume={0.7}
                 controls={false}
               />
-              <div className="mb-32 grid text-white text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
+              <div className="mb-32 grid text-neutral-300 text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
                 <a
                   href="https://github.com/iChristwin/m3ters.js"
                   className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-neutral-700 hover:bg-neutral-800/30"

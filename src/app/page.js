@@ -4,6 +4,10 @@ import React, { useState, useEffect } from "react";
 import ReactPlayer from "react-player";
 import { Button, Input } from "@nextui-org/react";
 import { NextUIProvider } from "@nextui-org/react";
+import ReactGA from "react-ga4";
+
+ReactGA.initialize("G-YXPE6R7SZG");
+ReactGA.send({ hitType: "pageview", page: "/", title: "Demo m3ters" });
 
 export default function Home() {
   const [showSmallScreenMessage, setShowSmallScreenMessage] = useState(false);
@@ -12,7 +16,7 @@ export default function Home() {
     setShowSmallScreenMessage(window.innerWidth < 600);
   }, []);
 
-  const [seed, setSeed] = useState("");
+  const [seed, setSeed] = useState();
   const [isPlaying, setIsPlaying] = useState(false);
   let intervalId;
 
@@ -44,9 +48,9 @@ export default function Home() {
           backgroundPosition: "center bottom",
         }}
       >
-        <div className="dark bg-gradient-to-b from-gray-900/75 to-black flex min-h-screen flex-col items-center justify-between p-9">
+        <div className="bg-gradient-to-b from-gray-900/75 to-black flex min-h-screen flex-col items-center justify-between p-9">
           <div className="z-10 max-w-7xl w-full items-center justify-end font-mono text-sm lg:flex">
-            <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
+            <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white lg:static lg:h-auto lg:w-auto lg:bg-none">
               <a
                 className="pointer-events-none flex place-items-center justify-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
                 href="https://www.npmjs.com/package/m3ters"
@@ -85,8 +89,9 @@ export default function Home() {
                     onChange={(event) => setSeed(event.target.value)}
                     id="seedInput"
                     placeholder="Type to generate..."
+                    className="dark"
                     classNames={{
-                      nput: [
+                      input: [
                         "bg-transparent",
                         "text-black/90 dark:text-white/90",
                         "placeholder:text-default-700/50 dark:placeholder:text-white/60",
@@ -128,7 +133,7 @@ export default function Home() {
               <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
                 <a
                   href="https://github.com/iChristwin/m3ters.js"
-                  className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
+                  className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-neutral-700 hover:bg-neutral-800/30"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -144,7 +149,7 @@ export default function Home() {
                 </a>
                 <a
                   href="https://www.npmjs.com/package/m3ters"
-                  className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800 hover:dark:bg-opacity-30"
+                  className="group rounded-lg border border-transparent px-5 py-4 transition-colors  hover:border-neutral-700 hover:bg-neutral-800 hover:bg-opacity-30"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -163,7 +168,7 @@ export default function Home() {
                 </a>
                 <a
                   href="https://m3tering.whynotswitch.com"
-                  className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
+                  className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-neutral-700 hover:bg-neutral-800/30"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -179,7 +184,7 @@ export default function Home() {
                 </a>
                 <a
                   href="https://discord.gg/Z4AyRjh7gW"
-                  className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
+                  className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-neutral-700 hover:bg-neutral-800/30"
                   target="_blank"
                   rel="noopener noreferrer"
                 >

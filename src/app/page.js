@@ -52,7 +52,7 @@ export default function Home() {
           <div className="z-10 max-w-7xl w-full items-center justify-end font-mono text-sm lg:flex">
             <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white lg:static lg:h-auto lg:w-auto lg:bg-none">
               <a
-                className="pointer-events-none flex place-items-center justify-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
+                className="pointer-events-none text-white flex place-items-center justify-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
                 href="https://www.npmjs.com/package/m3ters"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -67,7 +67,7 @@ export default function Home() {
           {showSmallScreenMessage ? (
             <p
               style={{ marginBottom: "300px" }}
-              className="font-mono text-3xl font-semibold text-gray-400"
+              className="font-mono text-3xl font-semibold text-neutral-400"
             >
               This page is best viewed on a larger screen. Please revisit later!
             </p>
@@ -76,13 +76,13 @@ export default function Home() {
               <div style={{ paddingTop: "150px", paddingBottom: "50px" }}>
                 <div className="grid grid-cols-1 place-items-center justify-center">
                   <div className=" bg-gray-500/25 rounded-full px-4">
-                    <h2 className="capitalize text-2xl font-semibold">
+                    <h2 className="capitalize text-neutral-300 text-2xl font-semibold">
                       <M3terAlias seed={seed} />
                     </h2>
                   </div>
                   <M3terHead seed={seed} />
                 </div>
-                <div className="flex place-items-center gap-3">
+                <div className="flex text-white place-items-center gap-3">
                   <Input
                     style={{ borderWidth: "0px" }}
                     value={seed}
@@ -130,7 +130,7 @@ export default function Home() {
                 volume={0.7}
                 controls={false}
               />
-              <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
+              <div className="mb-32 grid text-white text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
                 <a
                   href="https://github.com/iChristwin/m3ters.js"
                   className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-neutral-700 hover:bg-neutral-800/30"

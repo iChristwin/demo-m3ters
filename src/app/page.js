@@ -42,10 +42,11 @@ export default function Home() {
     <NextUIProvider>
       <main
         style={{
-          backgroundImage: "url('./Untitled Project 9.tif.webp",
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
+          backgroundAttachment: "fixed",
           backgroundPosition: "center bottom",
+          backgroundImage: "url('./Untitled Project 9.tif.webp",
         }}
       >
         <div className="bg-gradient-to-b from-gray-900/75 to-black flex min-h-screen flex-col items-center justify-between p-9">

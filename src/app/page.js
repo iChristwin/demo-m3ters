@@ -163,7 +163,7 @@ export default function Home() {
                   <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
                     To install m3ters.js <br />
                     <code style={{ backgroundColor: "#444" }}>
-                      npm i m3ters --save
+                      npm i --save m3ters
                     </code>
                   </p>
                 </a>

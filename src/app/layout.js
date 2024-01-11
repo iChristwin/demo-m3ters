@@ -4,8 +4,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  metadataBase: new URL('https://m3ters.ichristwin.com'),
-    title: "Demo m3ters",
+  metadataBase: new URL("https://m3ters.ichristwin.com"),
+  title: "Demo m3ters",
   description: "A simple webpage to demonstrate them m3ters.js project",
   generator: "m3ters.js",
   applicationName: "m3ters.js",

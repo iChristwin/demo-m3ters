@@ -32,7 +32,7 @@ export const metadata = {
     title: "Demo m3ters",
     description: "A simple webpage to demonstrate them m3ters.js project",
     url: "https://m3ters.ichristwin.com",
-    siteName: "Next.js",
+    siteName: "m3ters.js",
     images: [
       {
         url: "https://m3ters.ichristwin.com/opengraph-image.png",

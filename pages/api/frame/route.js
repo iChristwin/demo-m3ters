@@ -5,7 +5,7 @@ async function getResponse(req) {
   const ReactDOMServer = (await import("react-dom/server")).default;
   const data = await req.json();
   const buttonId = data.untrustedData.buttonIndex;
-  const seed = undefined;
+  let seed = undefined;
 
   if (buttonId === 1) {
     seed = data.untrustedData.inputText;

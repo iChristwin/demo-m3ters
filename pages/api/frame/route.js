@@ -1,6 +1,3 @@
-import React from "react";
-import { M3terHead } from "m3ters";
-
 async function getResponse(req) {
   const ReactDOMServer = (await import("react-dom/server")).default;
   const data = await req.json();
@@ -20,13 +17,10 @@ async function getResponse(req) {
   } else {
     seed = undefined;
   }
-
   return new NextResponse(`<!DOCTYPE html><html><head>
     <title>This is frame 7</title>
     <meta property="fc:frame" content="vNext" />
-    <meta property="fc:frame:image" content="data:image/svg+xml;utf8,${encodeURIComponent(
-      ReactDOMServer.renderToString(<M3terHead seed={seed} />)
-    )}" />
+    <meta property="fc:frame:image" content="http://m3ters.ichristwin.com/api/m3ter-head/${seed}/>
     <meta property="fc:frame:button:1" content="use input👆" />
     <meta property="fc:frame:button:2" content="use my FID" />
     <meta property="fc:frame:button:3" content="surprise me" />

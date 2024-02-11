@@ -2,18 +2,10 @@ import React from "react";
 import { M3terHead } from "m3ters";
 import { getFrameMetadata } from "@coinbase/onchainkit";
 
-
-async function getSVG(){
-    const ReactDOMServer = (await import("react-dom/server")).default;
-    const svgContent = ReactDOMServer.renderToString(
-        <M3terHead seed={undefined} />
-      );
-    return `data:image/svg+xml;utf8,${encodeURIComponent(svgContent)}`;
-}
 const frameMetadata = getFrameMetadata({
-    buttons: [{ label: "Create" }],
+  buttons: [{ label: "Create" }],
   input: { text: "your text here" },
-  image: getSVG(),
+  image: `http://m3ters.ichristwin.com/api/m3ter-head/${undefined}`,
   post_url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/frame`,
 });
 
@@ -88,9 +80,5 @@ export const metadata = {
 };
 
 export default function Page() {
-  return (
-    <>
-      <M3terHead seed={undefined} />
-    </>
-  );
+  return <M3terHead seed={undefined} />;
 }

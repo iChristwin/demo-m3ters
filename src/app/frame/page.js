@@ -1,84 +1,117 @@
 import React from "react";
-import { M3terHead } from "m3ters";
-import { getFrameMetadata } from "@coinbase/onchainkit";
 
-const frameMetadata = getFrameMetadata({
-  buttons: [{ label: "Create" }],
-  input: { text: "your text here" },
-  image: `http://m3ters.ichristwin.com/api/m3ter-head/${undefined}`,
-  post_url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/frame`,
-});
+import {
+  FrameButton,
+  FrameContainer,
+  FrameImage,
+  FrameInput,
+  getPreviousFrame,
+  useFramesReducer,
+  getFrameMessage,
+} from "frames.js/next/server";
+import { getTokenUrl } from "frames.js";
 
-export const metadata = {
-  metadataBase: new URL("https://m3ters.ichristwin.com"),
-  title: "Demo m3ters",
-  description: "A simple webpage to demonstrate them m3ters.js project",
-  generator: "m3ters.js",
-  applicationName: "m3ters.js",
-  referrer: "origin-when-cross-origin",
-  keywords: [
-    "m3ters.js",
-    "m3ters",
-    "m3tering",
-    "m3tering protocol",
-    "avatar",
-    "SVG",
-    "alias",
-    "ichristwin",
-  ],
-  authors: [{ name: "ichristwin", url: "https://ichristwin.com" }],
-  creator: "ichristwin",
-  publisher: "ichristwin",
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
-  openGraph: {
-    title: "Demo m3ters",
-    description: "A simple webpage to demonstrate them m3ters.js project",
-    url: "https://m3ters.ichristwin.com",
-    siteName: "m3ters.js",
-    images: [
-      {
-        url: "https://m3ters.ichristwin.com/opengraph-image.png",
-        width: 500,
-        height: 500,
-        alt: "More Smiley nanobot",
-      },
-    ],
-    locale: "en_US",
-    type: "website",
-  },
-  robots: {
-    index: true,
-    follow: true,
-    nocache: true,
-    googleBot: {
-      index: true,
-      follow: false,
-      noimageindex: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
-  twitter: {
-    card: "website",
-    title: "Demo m3ters",
-    description: "A simple webpage to demonstrate them m3ters.js project",
-    site: "@ichristwin",
-    creator: "@ichristwin",
-    images: {
-      url: "https://m3ters.ichristwin.com/opengraph-image.png",
-      alt: "More Smiley nanobot",
-    },
-  },
-  other: {
-    ...frameMetadata,
-  },
+const reducer = (state, action) => {
+  const buttonId = action.postBody?.untrustedData.buttonIndex
+    ? action.postBody?.untrustedData.buttonIndex
+    : undefined;
+
+  let _seed_ = undefined;
+
+  switch (buttonId) {
+    case 1:
+      _seed_ = action.postBody?.untrustedData.inputText
+        ? action.postBody?.untrustedData.inputText
+        : undefined;
+      break;
+    case 2:
+      _seed_ = action.postBody?.untrustedData.fid
+        ? action.postBody?.untrustedData.fid
+        : undefined;
+      break;
+    case 3:
+      const buffer = new Uint8Array(20);
+      crypto.getRandomValues(buffer);
+      _seed_ = Array.from(buffer)
+        .map((byte) => byte.toString(16).padStart(2, "0"))
+        .join("");
+      break;
+    default:
+      _seed_ = undefined;
+  }
+
+  return {
+    seed: _seed_,
+  };
 };
 
-export default function Page() {
-  return <M3terHead seed={undefined} />;
+// This is a react server component only
+export default async function Home({ params, searchParams }) {
+  const previousFrame = getPreviousFrame(searchParams);
+  const frameMessage = await getFrameMessage(previousFrame.postBody);
+
+  if (frameMessage && !frameMessage?.isValid) {
+    throw new Error("Invalid frame payload");
+  }
+
+  const [state, dispatch] = useFramesReducer(
+    reducer,
+    { seed: undefined },
+    previousFrame
+  );
+
+  // Here: do a server side side effect either sync or async (using await), such as minting an NFT if you want.
+  // example: load the users credentials & check they have an NFT
+
+  console.log("info: state is:", state);
+
+  if (frameMessage) {
+    const {
+      isValid,
+      buttonIndex,
+      inputText,
+      castId,
+      requesterFid,
+      casterFollowsRequester,
+      requesterFollowsCaster,
+      likedCast,
+      recastedCast,
+      requesterVerifiedAddresses,
+      requesterUserData,
+    } = frameMessage;
+
+    console.log("info: frameMessage is:", frameMessage);
+  }
+
+  // then, when done, return next frame
+  return (
+    <div className="p-4">
+      <FrameContainer
+        postUrl="/frames"
+        state={state}
+        previousFrame={previousFrame}
+      >
+        <FrameImage>
+          <img
+            src={`http://m3ters.ichristwin.com/api/m3ter-head/${state.seed}`}
+          />
+        </FrameImage>
+
+        <FrameInput text="put some text here" />
+        <FrameButton>use input👆</FrameButton>
+        <FrameButton>use my FID</FrameButton>
+        <FrameButton>surprise me</FrameButton>
+        <FrameButton
+          action="mint"
+          target={getTokenUrl({
+            address: "0x060f3edd18c47f59bd23d063bbeb9aa4a8fec6df",
+            tokenId: "123",
+            chainId: 7777777,
+          })}
+        >
+          Mint
+        </FrameButton>
+      </FrameContainer>
+    </div>
+  );
 }

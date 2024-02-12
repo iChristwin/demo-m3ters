@@ -11,19 +11,6 @@ import {
 } from "frames.js/next/server";
 import { getTokenUrl } from "frames.js";
 
-export const HOST = process.env["NEXT_PUBLIC_HOST"] || "http://localhost:3000";
-export const LOCAL_STORAGE_KEYS = {
-  FARCASTER_USER: "farcasterUser",
-};
-
-/** WARNING: This is a mock hub for development purposes only that does not verify signatures */
-export const DEBUG_HUB_OPTIONS = {
-  hubHttpUrl:
-    process.env.NODE_ENV === "development"
-      ? "http://localhost:3000/debug/hub"
-      : undefined,
-};
-
 const reducer = (state, action) => {
   const buttonId = action.postBody?.untrustedData.buttonIndex
     ? action.postBody?.untrustedData.buttonIndex
@@ -52,13 +39,7 @@ const reducer = (state, action) => {
 // This is a react server component only
 export default async function Home({ params, searchParams }) {
   const previousFrame = getPreviousFrame(searchParams);
-  const frameMessage = await getFrameMessage(previousFrame.postBody, {
-    ...DEBUG_HUB_OPTIONS,
-  });
-
-  if (frameMessage && !frameMessage?.isValid) {
-    throw new Error("Invalid frame payload");
-  }
+  const frameMessage = await getFrameMessage(previousFrame.postBody);
 
   const [state, dispatch] = useFramesReducer(
     reducer,
@@ -69,7 +50,7 @@ export default async function Home({ params, searchParams }) {
   // Here: do a server side side effect either sync or async (using await), such as minting an NFT if you want.
   // example: load the users credentials & check they have an NFT
 
-  console.log("info: state is:", state);
+  /* console.log("info: state is:", state);
 
   if (frameMessage) {
     const {
@@ -87,7 +68,7 @@ export default async function Home({ params, searchParams }) {
     } = frameMessage;
 
     console.log("info: frameMessage is:", frameMessage);
-  }
+  } */
 
   // then, when done, return next frame
   return (
@@ -98,7 +79,7 @@ export default async function Home({ params, searchParams }) {
         previousFrame={previousFrame}
       >
         <FrameImage
-          src={`http://m3ters.ichristwin.com/api/m3ter-head/${state.seed}`}
+          src={`https://m3ters.ichristwin.com/api/m3ter-head/${state.seed}`}
         />
         <FrameInput text="put some text here" />
         <FrameButton>use input👆</FrameButton>

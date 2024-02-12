@@ -7,7 +7,6 @@ import {
   FrameInput,
   getPreviousFrame,
   useFramesReducer,
-  getFrameMessage,
 } from "frames.js/next/server";
 import { getTokenUrl } from "frames.js";
 
@@ -30,17 +29,13 @@ const reducer = (state, action) => {
           .join(""),
       };
     default:
-      return {
-        seed: "",
-      };
+      return { seed: "" };
   }
 };
 
 // This is a react server component only
 export default async function Home({ params, searchParams }) {
   const previousFrame = getPreviousFrame(searchParams);
-  const frameMessage = await getFrameMessage(previousFrame.postBody);
-
   const [state, dispatch] = useFramesReducer(
     reducer,
     { seed: "" },
@@ -49,26 +44,6 @@ export default async function Home({ params, searchParams }) {
 
   // Here: do a server side side effect either sync or async (using await), such as minting an NFT if you want.
   // example: load the users credentials & check they have an NFT
-
-  /* console.log("info: state is:", state);
-
-  if (frameMessage) {
-    const {
-      isValid,
-      buttonIndex,
-      inputText,
-      castId,
-      requesterFid,
-      casterFollowsRequester,
-      requesterFollowsCaster,
-      likedCast,
-      recastedCast,
-      requesterVerifiedAddresses,
-      requesterUserData,
-    } = frameMessage;
-
-    console.log("info: frameMessage is:", frameMessage);
-  } */
 
   // then, when done, return next frame
   return (

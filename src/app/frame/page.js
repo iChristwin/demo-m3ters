@@ -51,6 +51,7 @@ export default async function Home({ params, searchParams }) {
       <FrameContainer
         postUrl="/frames"
         state={state}
+        pathname="https://m3ters.ichristwin.com/frame"
         previousFrame={previousFrame}
       >
         <FrameImage

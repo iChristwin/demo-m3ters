@@ -60,17 +60,8 @@ export default async function Home({ params, searchParams }) {
         <FrameInput text="put some text here" />
         <FrameButton>use input👆</FrameButton>
         <FrameButton>use my FID</FrameButton>
-        <FrameButton>surprise me</FrameButton>
-        <FrameButton
-          action="mint"
-          target={getTokenUrl({
-            address: "0x060f3edd18c47f59bd23d063bbeb9aa4a8fec6df",
-            tokenId: "123",
-            chainId: 7777777,
-          })}
-        >
-          Mint
-        </FrameButton>
+        <FrameButton>surprise me!</FrameButton>
+        <FrameButton href={`https://m3ters.ichristwin.com`}>More</FrameButton>
       </FrameContainer>
     </div>
   );

@@ -5,20 +5,14 @@ import {
   FrameContainer,
   FrameImage,
   FrameInput,
-  FrameReducer,
-  NextServerPageProps,
   getPreviousFrame,
   useFramesReducer,
   getFrameMessage,
 } from "frames.js/next/server";
-import { DEBUG_HUB_OPTIONS } from "./debug/constants";
 import { getTokenUrl } from "frames.js";
 
-type State = {
-  seed: any;
-};
 
-const reducer: FrameReducer<State> = (state, action) => {
+const reducer = (state, action) => {
   const buttonId = action.postBody?.untrustedData.buttonIndex
     ? action.postBody?.untrustedData.buttonIndex
     : undefined;
@@ -47,18 +41,15 @@ const reducer: FrameReducer<State> = (state, action) => {
 export default async function Home({
   params,
   searchParams,
-}: NextServerPageProps) {
-  const previousFrame = getPreviousFrame<State>(searchParams);
-
-  const frameMessage = await getFrameMessage(previousFrame.postBody, {
-    ...DEBUG_HUB_OPTIONS,
-  });
+}) {
+  const previousFrame = getPreviousFrame(searchParams);
+  const frameMessage = await getFrameMessage(previousFrame.postBody);
 
   if (frameMessage && !frameMessage?.isValid) {
     throw new Error("Invalid frame payload");
   }
 
-  const [state, dispatch] = useFramesReducer<State>(
+  const [state, dispatch] = useFramesReducer(
     reducer,
     { seed: "" },
     previousFrame

@@ -61,7 +61,7 @@ export default async function Home({ params, searchParams }) {
         <FrameButton>use input👆</FrameButton>
         <FrameButton>use my FID</FrameButton>
         <FrameButton>surprise me!</FrameButton>
-        <FrameButton href={`https://m3ters.ichristwin.com`}>More</FrameButton>
+        <FrameButton action="link" target={`https://m3ters.ichristwin.com`}>More</FrameButton>
       </FrameContainer>
     </div>
   );

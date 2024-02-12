@@ -5,58 +5,62 @@ import {
   FrameContainer,
   FrameImage,
   FrameInput,
+  FrameReducer,
+  NextServerPageProps,
   getPreviousFrame,
   useFramesReducer,
   getFrameMessage,
 } from "frames.js/next/server";
+import { DEBUG_HUB_OPTIONS } from "./debug/constants";
 import { getTokenUrl } from "frames.js";
 
-const reducer = (state, action) => {
+type State = {
+  seed: any;
+};
+
+const reducer: FrameReducer<State> = (state, action) => {
   const buttonId = action.postBody?.untrustedData.buttonIndex
     ? action.postBody?.untrustedData.buttonIndex
     : undefined;
 
-  let _seed_ = undefined;
-
   switch (buttonId) {
     case 1:
-      _seed_ = action.postBody?.untrustedData.inputText
-        ? action.postBody?.untrustedData.inputText
-        : undefined;
-      break;
+      return { seed: action.postBody?.untrustedData.inputText };
     case 2:
-      _seed_ = action.postBody?.untrustedData.fid
-        ? action.postBody?.untrustedData.fid
-        : undefined;
-      break;
+      return { seed: action.postBody?.untrustedData.fid };
     case 3:
       const buffer = new Uint8Array(20);
       crypto.getRandomValues(buffer);
-      _seed_ = Array.from(buffer)
-        .map((byte) => byte.toString(16).padStart(2, "0"))
-        .join("");
-      break;
+      return {
+        seed: Array.from(buffer)
+          .map((byte) => byte.toString(16).padStart(2, "0"))
+          .join(""),
+      };
     default:
-      _seed_ = undefined;
+      return {
+        seed: "",
+      };
   }
-
-  return {
-    seed: _seed_,
-  };
 };
 
 // This is a react server component only
-export default async function Home({ params, searchParams }) {
-  const previousFrame = getPreviousFrame(searchParams);
-  const frameMessage = await getFrameMessage(previousFrame.postBody);
+export default async function Home({
+  params,
+  searchParams,
+}: NextServerPageProps) {
+  const previousFrame = getPreviousFrame<State>(searchParams);
+
+  const frameMessage = await getFrameMessage(previousFrame.postBody, {
+    ...DEBUG_HUB_OPTIONS,
+  });
 
   if (frameMessage && !frameMessage?.isValid) {
     throw new Error("Invalid frame payload");
   }
 
-  const [state, dispatch] = useFramesReducer(
+  const [state, dispatch] = useFramesReducer<State>(
     reducer,
-    { seed: undefined },
+    { seed: "" },
     previousFrame
   );
 
@@ -91,12 +95,9 @@ export default async function Home({ params, searchParams }) {
         state={state}
         previousFrame={previousFrame}
       >
-        <FrameImage>
-          <img
-            src={`http://m3ters.ichristwin.com/api/m3ter-head/${state.seed}`}
-          />
-        </FrameImage>
-
+        <FrameImage
+          src={`http://m3ters.ichristwin.com/api/m3ter-head/${state.seed}`}
+        />
         <FrameInput text="put some text here" />
         <FrameButton>use input👆</FrameButton>
         <FrameButton>use my FID</FrameButton>

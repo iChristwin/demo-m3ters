@@ -9,8 +9,20 @@ import {
   useFramesReducer,
   getFrameMessage,
 } from "frames.js/next/server";
-import { getTokenUrl } from "frames.js";
+import { HubHttpUrlOptions, getTokenUrl } from "frames.js";
 
+export const HOST = process.env["NEXT_PUBLIC_HOST"] || "http://localhost:3000";
+export const LOCAL_STORAGE_KEYS = {
+  FARCASTER_USER: "farcasterUser",
+};
+
+/** WARNING: This is a mock hub for development purposes only that does not verify signatures */
+export const DEBUG_HUB_OPTIONS: HubHttpUrlOptions = {
+  hubHttpUrl:
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:3000/debug/hub"
+      : undefined,
+};
 
 const reducer = (state, action) => {
   const buttonId = action.postBody?.untrustedData.buttonIndex
@@ -38,12 +50,11 @@ const reducer = (state, action) => {
 };
 
 // This is a react server component only
-export default async function Home({
-  params,
-  searchParams,
-}) {
+export default async function Home({ params, searchParams }) {
   const previousFrame = getPreviousFrame(searchParams);
-  const frameMessage = await getFrameMessage(previousFrame.postBody);
+  const frameMessage = await getFrameMessage(previousFrame.postBody, {
+    ...DEBUG_HUB_OPTIONS,
+  });
 
   if (frameMessage && !frameMessage?.isValid) {
     throw new Error("Invalid frame payload");

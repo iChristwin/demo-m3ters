@@ -9,7 +9,7 @@ import {
   useFramesReducer,
   getFrameMessage,
 } from "frames.js/next/server";
-import { HubHttpUrlOptions, getTokenUrl } from "frames.js";
+import { getTokenUrl } from "frames.js";
 
 export const HOST = process.env["NEXT_PUBLIC_HOST"] || "http://localhost:3000";
 export const LOCAL_STORAGE_KEYS = {
@@ -17,7 +17,7 @@ export const LOCAL_STORAGE_KEYS = {
 };
 
 /** WARNING: This is a mock hub for development purposes only that does not verify signatures */
-export const DEBUG_HUB_OPTIONS: HubHttpUrlOptions = {
+export const DEBUG_HUB_OPTIONS = {
   hubHttpUrl:
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000/debug/hub"

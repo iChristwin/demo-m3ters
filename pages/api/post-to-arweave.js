@@ -27,7 +27,7 @@ export default async (req, res) => {
     key: await arweave.wallets.generate(),
   });
 
-  const imageReceipt = await irys.upload(imgBuffer, { IMAGE_TAGS });
+  const imageReceipt = await irys.upload(imgBuffer, {tags: IMAGE_TAGS });
   const imageReceiptId = imageReceipt.id;
   console.log(`Data uploaded ==> ${AR_GATEWAY_URL}/${imageReceiptId}`);
 
@@ -52,7 +52,7 @@ export default async (req, res) => {
   };
 
   const metaDataString = JSON.stringify(nftMetadata);
-  const metadataReceipt = await irys.upload(metaDataString, { METADATA_TAGS });
+  const metadataReceipt = await irys.upload(metaDataString, {tags: METADATA_TAGS });
   console.log(`Data uploaded ==> ${AR_GATEWAY_URL}/${metadataReceipt.id}`);
   res.setHeader("Content-Type", "application/json");
   res.send({ image: imageReceiptId, metadata: metadataReceipt.id });

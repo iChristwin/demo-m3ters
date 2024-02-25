@@ -13,7 +13,7 @@ import {
 
 import ReactGA from "react-ga4";
 import toPng from "../../utils/toPng";
-// import ReactPlayer from "react-player";
+import ReactPlayer from "react-player";
 import { M3terAlias, M3terHead } from "m3ters";
 import React, { useState, useEffect } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
@@ -38,7 +38,7 @@ export default function Home() {
   };
   async function handelMint() {
     const name = renderToStaticMarkup(<M3terAlias seed={seed} />);
-    const pngBase64 = pngData.split(",")[1]
+    const pngBase64 = pngData.split(",")[1];
     const data = { pngBase64, name, seed, tokenId };
     console.log(data);
     const response = await fetch("http://localhost:3000/api/post-to-arweave", {
@@ -240,7 +240,7 @@ export default function Home() {
                   </ModalContent>
                 </Modal>
               </div>
-              {/* <ReactPlayer
+              <ReactPlayer
                 url="https://music.youtube.com/playlist?list=PL0HcRLHfAYKAk0Dfzlgo1-OgQC-O1I9Ab&si=K1EXAE06PU-KrpsC"
                 playing={isPlaying}
                 width="0%"
@@ -248,7 +248,7 @@ export default function Home() {
                 loop={true}
                 volume={0.7}
                 controls={false}
-              /> */}
+              />
               <div className="mb-32 grid text-neutral-300 text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
                 <a
                   href="https://github.com/iChristwin/m3ters.js"

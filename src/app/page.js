@@ -1,24 +1,63 @@
 "use client";
+import {
+  Input,
+  Modal,
+  Button,
+  ModalBody,
+  ModalHeader,
+  ModalFooter,
+  ModalContent,
+  useDisclosure,
+  NextUIProvider,
+} from "@nextui-org/react";
+
+import ReactGA from "react-ga4";
+import toPng from "../../utils/toPng";
+import ReactPlayer from "react-player";
 import { M3terAlias, M3terHead } from "m3ters";
 import React, { useState, useEffect } from "react";
-import ReactPlayer from "react-player";
-import { Button, Input } from "@nextui-org/react";
-import { NextUIProvider } from "@nextui-org/react";
-import ReactGA from "react-ga4";
-
-ReactGA.initialize("G-YXPE6R7SZG");
-ReactGA.send({ hitType: "pageview", page: "/", title: "Demo m3ters" });
+import { renderToStaticMarkup } from "react-dom/server";
 
 export default function Home() {
+  ReactGA.initialize("G-YXPE6R7SZG");
+  ReactGA.send({ hitType: "pageview", page: "/", title: "Demo m3ters" });
   const [showSmallScreenMessage, setShowSmallScreenMessage] = useState(false);
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [pngData, setPngData] = useState();
+  const [seed, setSeed] = useState();
+  const tokenId = 17;
+  let intervalId;
 
   useEffect(() => {
     setShowSmallScreenMessage(window.innerWidth < 600);
   }, []);
 
-  const [seed, setSeed] = useState();
-  const [isPlaying, setIsPlaying] = useState(false);
-  let intervalId;
+  const handlePlayPause = () => {
+    setIsPlaying(!isPlaying);
+  };
+  async function handelMint() {
+    const name = renderToStaticMarkup(<M3terAlias seed={seed} />);
+    const pngBase64 = pngData.split(",")[1];
+    const data = { pngBase64, name, seed, tokenId };
+    console.log(data);
+    const response = await fetch("http://localhost:3000/api/post-to-arweave", {
+      body: JSON.stringify(data),
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+    console.log(response.json);
+  }
+
+  function mintButton() {
+    onOpen();
+    toPng("svg").then((bitmapImage) => {
+      setPngData(bitmapImage);
+    });
+  }
 
   useEffect(() => {
     if (isPlaying) {
@@ -31,13 +70,9 @@ export default function Home() {
         setSeed("0x" + randomHex);
       }, 450);
     }
-
     return () => clearInterval(intervalId);
   }, [isPlaying]);
 
-  const handlePlayPause = () => {
-    setIsPlaying(!isPlaying);
-  };
   return (
     <NextUIProvider>
       <main
@@ -92,16 +127,15 @@ export default function Home() {
                 </div>
                 <div className="flex text-neutral-300 place-items-center gap-3">
                   <Input
-                    style={{ borderWidth: "0px" }}
                     value={seed}
                     onChange={(event) => setSeed(event.target.value)}
                     id="seedInput"
+                    variant="bordered"
                     placeholder="Type to generate..."
                     className="dark"
                     classNames={{
                       input: [
                         "bg-transparent",
-                        "text-black/90 dark:text-neutral-300/90",
                         "placeholder:text-default-700/50 dark:placeholder:text-neutral-300/60",
                       ],
                       innerWrapper: "bg-transparent",
@@ -128,6 +162,83 @@ export default function Home() {
                     {isPlaying ? "Stop" : "Randomize"}
                   </Button>
                 </div>
+                <div className="py-10 grid grid-cols-1 items-stretch">
+                  <Button color="primary" variant="solid" onClick={mintButton}>
+                    Mint
+                  </Button>
+                </div>
+                <Modal
+                  className="dark"
+                  backdrop="blur"
+                  size="3xl"
+                  isOpen={isOpen}
+                  onOpenChange={onOpenChange}
+                >
+                  <ModalContent>
+                    {(onClose) => (
+                      <>
+                        <ModalHeader className="flex flex-col gap-1"></ModalHeader>
+                        <ModalBody>
+                          <div className="grid grid-cols-2 gap-4 items-center">
+                            <img src={pngData} style={{ width: "500px" }} />
+                            <div>
+                              <p className="py-1 capitalize">
+                                <b>Name:</b> {<M3terAlias seed={seed} />}
+                              </p>
+                              <p className="py-1">
+                                <b>Source:</b> m3ters@1.0.3
+                              </p>
+                              <p className="py-1">
+                                <b>TokenId:</b> #{tokenId}
+                              </p>
+                              <p className="py-1">
+                                <b>Seed:</b> {String(seed)}
+                              </p>
+                            </div>
+                          </div>
+                          <Input
+                            label="Mint to"
+                            id="addressInput"
+                            variant="bordered"
+                            placeholder="Enter receiving address"
+                            className="dark"
+                            classNames={{
+                              input: [
+                                "bg-transparent",
+                                "placeholder:text-default-700/50 dark:placeholder:text-neutral-300/60",
+                              ],
+                              innerWrapper: "bg-transparent",
+                              inputWrapper: [
+                                "shadow-xl",
+                                "bg-default-200/50",
+                                "dark:bg-default/60",
+                                "backdrop-blur-xl",
+                                "backdrop-saturate-200",
+                                "hover:bg-default-200/30",
+                                "dark:hover:bg-default/30",
+                                "group-data-[focused=true]:bg-default-200/50",
+                                "dark:group-data-[focused=true]:bg-default/60",
+                                "!cursor-text",
+                              ],
+                            }}
+                          />
+                        </ModalBody>
+                        <ModalFooter>
+                          <Button
+                            color="danger"
+                            variant="faded"
+                            onClick={onClose}
+                          >
+                            Close
+                          </Button>
+                          <Button color="primary" onClick={handelMint}>
+                            Mint
+                          </Button>
+                        </ModalFooter>
+                      </>
+                    )}
+                  </ModalContent>
+                </Modal>
               </div>
               <ReactPlayer
                 url="https://music.youtube.com/playlist?list=PL0HcRLHfAYKAk0Dfzlgo1-OgQC-O1I9Ab&si=K1EXAE06PU-KrpsC"

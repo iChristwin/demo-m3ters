@@ -14,9 +14,8 @@ import {
 import ReactGA from "react-ga4";
 import toPng from "../../utils/toPng";
 import ReactPlayer from "react-player";
-import { M3terAlias, M3terHead } from "m3ters";
+import { m3terAlias, m3terAttributes, M3terHead } from "m3ters";
 import React, { useState, useEffect } from "react";
-import { renderToStaticMarkup } from "react-dom/server";
 
 export default function Home() {
   ReactGA.initialize("G-YXPE6R7SZG");
@@ -24,7 +23,7 @@ export default function Home() {
   const [showSmallScreenMessage, setShowSmallScreenMessage] = useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isPlaying, setIsPlaying] = useState(false);
-  const [pngData, setPngData] = useState();
+  const [image, setImage] = useState();
   const [seed, setSeed] = useState();
   const tokenId = 17;
   let intervalId;
@@ -37,10 +36,10 @@ export default function Home() {
     setIsPlaying(!isPlaying);
   };
   async function handelMint() {
-    const name = renderToStaticMarkup(<M3terAlias seed={seed} />);
-    const pngBase64 = pngData.split(",")[1];
-    const data = { pngBase64, name, seed, tokenId };
-    console.log(data);
+    const name = m3terAlias(seed);
+    const attr = m3terAttributes(seed);
+
+    const data = { name, image, seed, tokenId, attr };
     const response = await fetch("http://localhost:3000/api/post-to-arweave", {
       body: JSON.stringify(data),
       method: "POST",
@@ -49,13 +48,13 @@ export default function Home() {
         "Content-Type": "application/json",
       },
     });
-    console.log(response.json);
+    console.log(await response.json());
   }
 
   function mintButton() {
     onOpen();
-    toPng("svg").then((bitmapImage) => {
-      setPngData(bitmapImage);
+    toPng("svg").then((imageData) => {
+      setImage(imageData);
     });
   }
 
@@ -68,7 +67,7 @@ export default function Home() {
           .map((byte) => byte.toString(16).padStart(2, "0"))
           .join("");
         setSeed("0x" + randomHex);
-      }, 450);
+      }, 1050);
     }
     return () => clearInterval(intervalId);
   }, [isPlaying]);
@@ -120,10 +119,10 @@ export default function Home() {
                 <div className="grid grid-cols-1 place-items-center justify-center">
                   <div className=" bg-gray-500/25 rounded-full px-4">
                     <h2 className="capitalize text-neutral-300 text-2xl font-semibold">
-                      <M3terAlias seed={seed} />
+                      {m3terAlias(seed)}
                     </h2>
                   </div>
-                  <M3terHead seed={seed} />
+                  <M3terHead seed={seed} size={650} />
                 </div>
                 <div className="flex text-neutral-300 place-items-center gap-3">
                   <Input
@@ -180,10 +179,10 @@ export default function Home() {
                         <ModalHeader className="flex flex-col gap-1"></ModalHeader>
                         <ModalBody>
                           <div className="grid grid-cols-2 gap-4 items-center">
-                            <img src={pngData} style={{ width: "500px" }} />
+                            <img src={image} style={{ width: "500px" }} />
                             <div>
                               <p className="py-1 capitalize">
-                                <b>Name:</b> {<M3terAlias seed={seed} />}
+                                <b>Name:</b> {m3terAlias(seed)}
                               </p>
                               <p className="py-1">
                                 <b>Source:</b> m3ters@1.0.3

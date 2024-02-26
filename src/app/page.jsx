@@ -13,9 +13,11 @@ import {
 
 import ReactGA from "react-ga4";
 import toPng from "../../utils/toPng";
-import ReactPlayer from "react-player";
+const ReactPlayer = dynamic(import("react-player"), { ssr: false });
+import dynamic from "next/dynamic";
 import { m3terAlias, m3terAttributes, M3terHead } from "m3ters";
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 
 export default function Home() {
   ReactGA.initialize("G-YXPE6R7SZG");
@@ -24,9 +26,30 @@ export default function Home() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isPlaying, setIsPlaying] = useState(false);
   const [image, setImage] = useState();
-  const [seed, setSeed] = useState();
+  const [seed, setSeed] = useState("");
   const tokenId = 17;
-  let intervalId;
+
+  const [windowWidth, setWindowWidth] = useState(0);
+  const [size, setSize] = useState(0);
+  useEffect(() => {
+    setWindowWidth(window.innerWidth);
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    setSize(0.4 * windowWidth);
+  }, [windowWidth]);
 
   useEffect(() => {
     setShowSmallScreenMessage(window.innerWidth < 600);
@@ -38,7 +61,6 @@ export default function Home() {
   async function handelMint() {
     const name = m3terAlias(seed);
     const attr = m3terAttributes(seed);
-
     const data = { name, image, seed, tokenId, attr };
     const response = await fetch("http://localhost:3000/api/post-to-arweave", {
       body: JSON.stringify(data),
@@ -59,6 +81,7 @@ export default function Home() {
   }
 
   useEffect(() => {
+    let intervalId;
     if (isPlaying) {
       intervalId = setInterval(() => {
         const buffer = new Uint8Array(20);
@@ -122,7 +145,7 @@ export default function Home() {
                       {m3terAlias(seed)}
                     </h2>
                   </div>
-                  <M3terHead seed={seed} size={650} />
+                  <M3terHead seed={seed} size={size} />
                 </div>
                 <div className="flex text-neutral-300 place-items-center gap-3">
                   <Input
@@ -179,7 +202,13 @@ export default function Home() {
                         <ModalHeader className="flex flex-col gap-1"></ModalHeader>
                         <ModalBody>
                           <div className="grid grid-cols-2 gap-4 items-center">
-                            <img src={image} style={{ width: "500px" }} />
+                            <Image
+                              src={image}
+                              alt="Image"
+                              width={500}
+                              height={100}
+                            />
+                            {/* <img  style={{ width: "500px" }} alt="hhh" /> */}
                             <div>
                               <p className="py-1 capitalize">
                                 <b>Name:</b> {m3terAlias(seed)}

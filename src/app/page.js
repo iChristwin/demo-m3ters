@@ -67,7 +67,7 @@ export default function Home() {
           .map((byte) => byte.toString(16).padStart(2, "0"))
           .join("");
         setSeed("0x" + randomHex);
-      }, 1050);
+      }, 1000);
     }
     return () => clearInterval(intervalId);
   }, [isPlaying]);

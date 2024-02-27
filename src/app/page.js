@@ -13,7 +13,8 @@ import {
 
 import ReactGA from "react-ga4";
 import toPng from "../../utils/toPng";
-const ReactPlayer = dynamic(import("react-player"), { ssr: false });
+import ReactPlayer from "react-player";
+//const ReactPlayer = dynamic(import("react-player"));
 import dynamic from "next/dynamic";
 import { m3terAlias, m3terAttributes, M3terHead } from "m3ters";
 import React, { useState, useEffect } from "react";

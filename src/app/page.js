@@ -11,13 +11,13 @@ import {
   NextUIProvider,
 } from "@nextui-org/react";
 
-import ReactGA from "react-ga4";
-import toPng from "../../utils/toPng";
-import dynamic from "next/dynamic";
-const ReactPlayer = dynamic(() => import("react-player/lazy"), { ssr: false });
-import { m3terAlias, m3terAttributes, M3terHead } from "m3ters";
-import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import ReactGA from "react-ga4";
+import React, { useState, useEffect } from "react";
+import { M3terHead, m3terAlias, m3terAttributes } from "m3ters";
+import toPng from "../../utils/toPng";
+
+const ReactPlayer = dynamic(() => import("react-player/lazy"), { ssr: false });
 
 export default function Home() {
   ReactGA.initialize("G-YXPE6R7SZG");
@@ -25,37 +25,43 @@ export default function Home() {
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isPlaying, setIsPlaying] = useState(false);
-  const [image, setImage] = useState();
+  const [windowWidth, setWindowWidth] = useState(0);
   const [seed, setSeed] = useState("");
+  const [name, setName] = useState("");
+  const [image, setImage] = useState();
+  const [size, setSize] = useState(0);
   const tokenId = 17;
 
-  const [windowWidth, setWindowWidth] = useState(0);
-  const [size, setSize] = useState(0);
   useEffect(() => {
     setWindowWidth(window.innerWidth);
-  }, []);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
   }, []);
 
   useEffect(() => {
     setSize(0.4 * windowWidth);
   }, [windowWidth]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   const handlePlayPause = () => {
     setIsPlaying(!isPlaying);
   };
+
+  function mintButton() {
+    onOpen();
+    toPng("svg").then((imageData) => {
+      setImage(imageData);
+    });
+  }
+
   async function handelMint() {
-    const name = m3terAlias(seed);
     const attr = m3terAttributes(seed);
     const data = { name, image, seed, tokenId, attr };
     const response = await fetch("http://localhost:3000/api/post-to-arweave", {
@@ -69,13 +75,6 @@ export default function Home() {
     console.log(await response.json());
   }
 
-  function mintButton() {
-    onOpen();
-    toPng("svg").then((imageData) => {
-      setImage(imageData);
-    });
-  }
-
   useEffect(() => {
     let intervalId;
     if (isPlaying) {
@@ -85,8 +84,11 @@ export default function Home() {
         const randomHex = Array.from(buffer)
           .map((byte) => byte.toString(16).padStart(2, "0"))
           .join("");
-        setSeed("0x" + randomHex);
-      }, 1050);
+        const _seed = "0x" + randomHex;
+        const _name = m3terAlias(_seed);
+        setName(_name);
+        setSeed(_seed);
+      }, 1000);
     }
     return () => clearInterval(intervalId);
   }, [isPlaying]);
@@ -130,7 +132,7 @@ export default function Home() {
               <div className="grid grid-cols-1 place-items-center justify-center">
                 <div className=" bg-gray-500/25 rounded-full px-4">
                   <h2 className="capitalize text-neutral-300 text-2xl font-semibold">
-                    {m3terAlias(seed)}
+                    {name}
                   </h2>
                 </div>
                 <M3terHead seed={seed} size={size} />
@@ -196,10 +198,9 @@ export default function Home() {
                             width={500}
                             height={100}
                           />
-                          {/* <img  style={{ width: "500px" }} alt="hhh" /> */}
                           <div>
                             <p className="py-1 capitalize">
-                              <b>Name:</b> {m3terAlias(seed)}
+                              <b>Name:</b> {name}
                             </p>
                             <p className="py-1">
                               <b>Source:</b> m3ters@1.0.3

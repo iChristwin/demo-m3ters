@@ -13,6 +13,7 @@ import {
 
 import Image from "next/image";
 import ReactGA from "react-ga4";
+import dynamic from "next/dynamic";
 import React, { useState, useEffect } from "react";
 import { M3terHead, m3terAlias, m3terAttributes } from "m3ters";
 import toPng from "../../utils/toPng";

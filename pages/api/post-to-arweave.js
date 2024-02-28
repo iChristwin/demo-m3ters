@@ -14,28 +14,43 @@ export default async (req, res) => {
     token: "arweave",
   });
 
-  const { name, image, seed, tokenId, attr } = req.body;
-
+  const { image, tokenId, attr } = req.body;
   const tags = [
     { name: "application-id", value: "m3ter-head" },
     { name: "Content-Type", value: "application/json" },
   ];
 
   const nftMetadata = {
-    name,
-    description: `M3ter-Head #${tokenId} has escaped the code; algorithmically spawned from the seed: ${seed}`,
+    name: attr["name"],
+    description: `M3ter-Head #${tokenId} has escaped the code; algorithmically spawned from the seed: ${attr["seed"]}`,
     attributes: [
+      {
+        trait_type: "eyes",
+        value: attr["eyes"],
+      },
+      {
+        trait_type: "mouth",
+        value: attr["mouth"],
+      },
+      {
+        trait_type: "texture",
+        value: attr["texture"],
+      },
+      {
+        trait_type: "color",
+        value: attr["color"],
+      },
+      {
+        trait_type: "seed",
+        value: attr["seed"],
+      },
       {
         trait_type: "tokenId",
         value: tokenId,
       },
       {
-        trait_type: "seed",
-        value: seed,
-      },
-      {
         trait_type: "src",
-        value: "m3ters@1.0.3",
+        value: "m3ters@1.0.4",
       },
     ],
     image,

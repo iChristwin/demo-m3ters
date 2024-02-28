@@ -31,10 +31,16 @@ export default function Home() {
   const [name, setName] = useState("");
   const [image, setImage] = useState();
   const [size, setSize] = useState(0);
-  const tokenId = 17;
+  const tokenId = 10;
 
   useEffect(() => {
-    setWindowWidth(window.innerWidth);
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   useEffect(() => {
@@ -64,7 +70,7 @@ export default function Home() {
 
   async function handelMint() {
     const attr = m3terAttributes(seed);
-    const data = { name, image, seed, tokenId, attr };
+    const data = { image, tokenId, attr };
     const response = await fetch("http://localhost:3000/api/post-to-arweave", {
       body: JSON.stringify(data),
       method: "POST",

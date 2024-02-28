@@ -34,13 +34,7 @@ export default function Home() {
   const tokenId = 10;
 
   useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
+    setWindowWidth(window.innerWidth);
   }, []);
 
   useEffect(() => {

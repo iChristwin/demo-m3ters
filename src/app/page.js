@@ -62,10 +62,13 @@ export default function Home() {
   };
 
   function mintButton() {
-    onOpen();
+    const _size = size;
+    setSize(500);
     toPng("svg").then((imageData) => {
       setImage(imageData);
     });
+    onOpen();
+    setSize(_size);
   }
 
   async function handelMint() {

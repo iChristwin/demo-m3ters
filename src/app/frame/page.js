@@ -1,4 +1,5 @@
 import React from "react";
+import ReactGA from "react-ga4";
 
 import {
   FrameButton,
@@ -35,6 +36,9 @@ const reducer = (state, action) => {
 
 // This is a react server component only
 export default async function Home({ params, searchParams }) {
+  ReactGA.initialize("G-YXPE6R7SZG");
+  ReactGA.send({ hitType: "pageview", page: "/frame", title: "M3ters Frame" });
+
   const previousFrame = getPreviousFrame(searchParams);
   const [state, dispatch] = useFramesReducer(
     reducer,
@@ -61,7 +65,9 @@ export default async function Home({ params, searchParams }) {
         <FrameButton>use input👆</FrameButton>
         <FrameButton>use my FID</FrameButton>
         <FrameButton>surprise me!</FrameButton>
-        <FrameButton action="link" target={`https://m3ters.ichristwin.com`}>More</FrameButton>
+        <FrameButton action="link" target={`https://m3ters.ichristwin.com`}>
+          More
+        </FrameButton>
       </FrameContainer>
     </div>
   );

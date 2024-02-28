@@ -56,7 +56,9 @@ export default async (req, res) => {
     image,
   };
 
-  const receipt = await irys.upload(JSON.stringify(nftMetadata), { tags });
+  const metadata = JSON.stringify(nftMetadata);
+  console.log("data size:", Buffer.byteLength(metadata, "utf8"));
+  const receipt = await irys.upload(metadata, { tags });
   const data = { metadata: receipt.id };
   res.setHeader("Content-Type", "application/json");
   res.send(data);

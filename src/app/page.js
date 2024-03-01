@@ -136,7 +136,7 @@ export default function Home() {
               <div className="grid grid-cols-1 place-items-center justify-center">
                 <div className=" bg-gray-500/25 rounded-full px-4">
                   <h2 className="capitalize text-neutral-300 text-2xl font-semibold">
-                    {name}
+                    {m3terAlias(seed)}
                   </h2>
                 </div>
                 <M3terHead seed={seed} size={size} />

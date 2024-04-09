@@ -14,15 +14,25 @@ export default async (req, res) => {
     token: "arweave",
   });
 
-  const { image, tokenId, attr } = req.body;
-  const tags = [
-    { name: "application-id", value: "m3ter-head" },
+  const { pngBase64, tokenId, attr } = req.body;
+  const imgBuffer = Buffer.from(pngBase64, "base64");
+  const imageTags = [
+    { name: "application-id", value: "M3ter-Head" },
+    { name: "Content-Type", value: "image/png" },
+  ];
+
+  const metadataTags = [
+    { name: "application-id", value: "M3ter-Head" },
     { name: "Content-Type", value: "application/json" },
   ];
 
+  console.log("image size:", imgBuffer.byteLength);
+  const imageReceipt = await irys.upload(imgBuffer, { tags: imageTags });
+  const imageReceiptId = imageReceipt.id;
+
   const nftMetadata = {
     name: attr["name"],
-    description: `M3ter-Head #${tokenId} has escaped the code; algorithmically spawned from the seed: ${attr["seed"]}`,
+    description: `From the primordial code, the ${attr["name"]} emerges. Not forged by mortal hand, but spawned from the arcane seed: ${attr["seed"]}. It carries the echoes of creation, a sigil imbued with potential, the firstborn of a digital lineage`,
     attributes: [
       {
         trait_type: "eyes",
@@ -53,13 +63,13 @@ export default async (req, res) => {
         value: "m3ters@1.0.4",
       },
     ],
-    image,
+    image: `https://ar-io.net/${imageReceiptId}`,
   };
 
   const metadata = JSON.stringify(nftMetadata);
   console.log("data size:", Buffer.byteLength(metadata, "utf8"));
-  const receipt = await irys.upload(metadata, { tags });
-  const data = { metadata: receipt.id };
+  const receipt = await irys.upload(metadata, { tags: metadataTags });
+  const data = { metadata: receipt.id, image: imageReceiptId };
   res.setHeader("Content-Type", "application/json");
   res.send(data);
   console.log(data);

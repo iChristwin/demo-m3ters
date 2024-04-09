@@ -31,14 +31,14 @@ export default function Home() {
   const [name, setName] = useState("");
   const [image, setImage] = useState();
   const [size, setSize] = useState(0);
-  const tokenId = 10;
+  const tokenId = 0;
 
   useEffect(() => {
     setWindowWidth(window.innerWidth);
   }, []);
 
   useEffect(() => {
-    setSize(0.4 * windowWidth);
+    setSize(0.5 * windowWidth);
   }, [windowWidth]);
 
   useEffect(() => {
@@ -56,19 +56,20 @@ export default function Home() {
   };
 
   function mintButton() {
-    const _size = size;
-    setSize(500);
+    // const _size = size;
+    // setSize(500);
     toPng("svg").then((imageData) => {
       setImage(imageData);
     });
     onOpen();
-    setSize(_size);
+    // setSize(_size);
   }
 
   async function handelMint() {
     const attr = m3terAttributes(seed);
-    const data = { image, tokenId, attr };
-    const response = await fetch("http://localhost:3000/api/post-to-arweave", {
+    const pngBase64 = image.split(",")[1];
+    const data = { pngBase64, tokenId, attr };
+    const response = await fetch("/api/post-to-arweave", {
       body: JSON.stringify(data),
       method: "POST",
       headers: {
@@ -139,7 +140,7 @@ export default function Home() {
                     {m3terAlias(seed)}
                   </h2>
                 </div>
-                <M3terHead seed={seed} size={size} />
+                <M3terHead seed={seed} size={500} />
               </div>
               <div className="flex text-neutral-300 place-items-center gap-3">
                 <Input
@@ -207,7 +208,7 @@ export default function Home() {
                               <b>Name:</b> {name}
                             </p>
                             <p className="py-1">
-                              <b>Source:</b> m3ters@1.0.3
+                              <b>Source:</b> m3ters@1.0.4
                             </p>
                             <p className="py-1">
                               <b>TokenId:</b> #{tokenId}

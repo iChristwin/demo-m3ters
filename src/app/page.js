@@ -31,7 +31,6 @@ export default function Home() {
   const [name, setName] = useState("");
   const [image, setImage] = useState();
   const [size, setSize] = useState(0);
-  const tokenId = 0;
 
   useEffect(() => {
     setWindowWidth(window.innerWidth);
@@ -68,7 +67,7 @@ export default function Home() {
   async function handelMint() {
     const attr = m3terAttributes(seed);
     const pngBase64 = image.split(",")[1];
-    const data = { pngBase64, tokenId, attr };
+    const data = { pngBase64, seed, attr };
     const response = await fetch("/api/post-to-arweave", {
       body: JSON.stringify(data),
       method: "POST",
@@ -211,7 +210,7 @@ export default function Home() {
                               <b>Source:</b> m3ters@1.0.4
                             </p>
                             <p className="py-1">
-                              <b>TokenId:</b> #{tokenId}
+                              <b>TokenId:</b> #{seed}
                             </p>
                             <p className="py-1">
                               <b>Seed:</b> {String(seed)}

@@ -32,7 +32,7 @@ export default async (req, res) => {
 
   const nftMetadata = {
     name: attr["name"],
-    description: `From the primordial code, the ${attr["name"]} emerges. Not forged by mortal hand, but spawned from the arcane seed: ${attr["seed"]}. It carries the echoes of creation, a sigil imbued with potential, the firstborn of a digital lineage`,
+    description: `This token integrates with a smart meter, enabling you to sell electricity directly to others, like a mini power plant`,
     attributes: [
       {
         trait_type: "eyes",
@@ -56,7 +56,7 @@ export default async (req, res) => {
       },
       {
         trait_type: "tokenId",
-        value: tokenId,
+        value: Number(tokenId),
       },
       {
         trait_type: "src",

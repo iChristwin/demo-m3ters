@@ -33,7 +33,8 @@ export default async (req, res) => {
 
   const nftMetadata = {
     name: attr["name"],
-    description: `This token integrates with a smart meter, enabling you to sell electricity directly to others, like a mini power plant`,
+    description:
+      "This token integrates with a smart meter, enabling you to sell electricity directly to others, like a mini power plant",
     attributes: [
       {
         trait_type: "eyes",

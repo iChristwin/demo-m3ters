@@ -24,6 +24,7 @@ export default function Home() {
   ReactGA.initialize("G-YXPE6R7SZG");
   ReactGA.send({ hitType: "pageview", page: "/", title: "Demo m3ters" });
 
+  const { m3ters } = require("../../package.json").dependencies;
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isPlaying, setIsPlaying] = useState(false);
   const [windowWidth, setWindowWidth] = useState(0);
@@ -207,7 +208,7 @@ export default function Home() {
                               <b>Name:</b> {name}
                             </p>
                             <p className="py-1">
-                              <b>Source:</b> m3ters@1.0.4
+                              <b>Source:</b> m3ters@{m3ters}
                             </p>
                             <p className="py-1">
                               <b>TokenId:</b> #{seed}

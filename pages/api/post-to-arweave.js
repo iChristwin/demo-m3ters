@@ -14,6 +14,7 @@ export default async (req, res) => {
     token: "arweave",
   });
 
+  const { m3ters } = require("../../package.json").dependencies;
   const { pngBase64, tokenId, attr } = req.body;
   const imgBuffer = Buffer.from(pngBase64, "base64");
   const imageTags = [
@@ -60,7 +61,7 @@ export default async (req, res) => {
       },
       {
         trait_type: "src",
-        value: "m3ters@1.0.6",
+        value: `m3ters@${m3ters}`,
       },
     ],
     image: `https://ar-io.net/${imageReceiptId}`,

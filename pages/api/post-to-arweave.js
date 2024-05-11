@@ -60,7 +60,7 @@ export default async (req, res) => {
       },
       {
         trait_type: "src",
-        value: "m3ters@1.0.5",
+        value: "m3ters@1.0.6",
       },
     ],
     image: `https://ar-io.net/${imageReceiptId}`,

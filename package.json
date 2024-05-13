@@ -9,17 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@irys/sdk": "^0.1.6",
     "@nextui-org/react": "^2.2.9",
-    "arweave": "^1.14.4",
-    "frames.js": "^0.5.0",
-    "import": "^0.0.6",
     "m3ters": "1.0.6",
     "next": "^14.1.0",
     "react": "^18",
     "react-dom": "^18",
     "react-ga4": "^2.1.0",
-    "react-player": "^2.14.1"
+    "react-player": "^2.14.1",
+    "sharp": "^0.33.3"
   },
   "devDependencies": {
     "autoprefixer": "^10.0.1",

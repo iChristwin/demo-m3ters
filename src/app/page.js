@@ -1,22 +1,9 @@
 "use client";
-import {
-  Input,
-  Modal,
-  Button,
-  ModalBody,
-  ModalHeader,
-  ModalFooter,
-  ModalContent,
-  useDisclosure,
-  NextUIProvider,
-} from "@nextui-org/react";
-
-import Image from "next/image";
 import ReactGA from "react-ga4";
 import dynamic from "next/dynamic";
+import { M3terHead, m3terAlias } from "m3ters";
 import React, { useState, useEffect } from "react";
-import { M3terHead, m3terAlias, m3terAttributes } from "m3ters";
-import toPng from "../../utils/toPng";
+import { Input, Button, NextUIProvider } from "@nextui-org/react";
 
 const ReactPlayer = dynamic(() => import("react-player/lazy"), { ssr: false });
 
@@ -24,13 +11,9 @@ export default function Home() {
   ReactGA.initialize("G-YXPE6R7SZG");
   ReactGA.send({ hitType: "pageview", page: "/", title: "Demo m3ters" });
 
-  const { m3ters } = require("../../package.json").dependencies;
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isPlaying, setIsPlaying] = useState(false);
   const [windowWidth, setWindowWidth] = useState(0);
   const [seed, setSeed] = useState("");
-  const [name, setName] = useState("");
-  const [image, setImage] = useState();
   const [size, setSize] = useState(0);
 
   useEffect(() => {
@@ -55,31 +38,6 @@ export default function Home() {
     setIsPlaying(!isPlaying);
   };
 
-  function mintButton() {
-    // const _size = size;
-    // setSize(500);
-    toPng("svg").then((imageData) => {
-      setImage(imageData);
-    });
-    onOpen();
-    // setSize(_size);
-  }
-
-  async function handelMint() {
-    const attr = m3terAttributes(seed);
-    const pngBase64 = image.split(",")[1];
-    const data = { pngBase64, seed, attr };
-    const response = await fetch("/api/post-to-arweave", {
-      body: JSON.stringify(data),
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    });
-    console.log(await response.json());
-  }
-
   useEffect(() => {
     let intervalId;
     if (isPlaying) {
@@ -90,8 +48,6 @@ export default function Home() {
           .map((byte) => byte.toString(16).padStart(2, "0"))
           .join("");
         const _seed = "0x" + randomHex;
-        const _name = m3terAlias(_seed);
-        setName(_name);
         setSeed(_seed);
       }, 1000);
     }
@@ -140,7 +96,7 @@ export default function Home() {
                     {m3terAlias(seed)}
                   </h2>
                 </div>
-                <M3terHead seed={seed} size={500} />
+                <M3terHead seed={seed} size={size} />
               </div>
               <div className="flex text-neutral-300 place-items-center gap-3">
                 <Input
@@ -179,88 +135,6 @@ export default function Home() {
                   {isPlaying ? "Stop" : "Randomize"}
                 </Button>
               </div>
-              <div className="py-10 grid grid-cols-1 items-stretch">
-                <Button color="primary" variant="solid" onClick={mintButton}>
-                  Mint
-                </Button>
-              </div>
-              <Modal
-                className="dark"
-                backdrop="blur"
-                size="3xl"
-                isOpen={isOpen}
-                onOpenChange={onOpenChange}
-              >
-                <ModalContent>
-                  {(onClose) => (
-                    <>
-                      <ModalHeader className="flex flex-col gap-1"></ModalHeader>
-                      <ModalBody>
-                        <div className="grid grid-cols-2 gap-4 items-center">
-                          <Image
-                            src={image}
-                            alt="Image"
-                            width={500}
-                            height={100}
-                          />
-                          <div>
-                            <p className="py-1 capitalize">
-                              <b>Name:</b> {name}
-                            </p>
-                            <p className="py-1">
-                              <b>Source:</b> m3ters@{m3ters}
-                            </p>
-                            <p className="py-1">
-                              <b>TokenId:</b> #{seed}
-                            </p>
-                            <p className="py-1">
-                              <b>Seed:</b> {String(seed)}
-                            </p>
-                          </div>
-                        </div>
-                        <Input
-                          label="Mint to"
-                          id="addressInput"
-                          variant="bordered"
-                          placeholder="Enter receiving address"
-                          className="dark"
-                          classNames={{
-                            input: [
-                              "bg-transparent",
-                              "placeholder:text-default-700/50 dark:placeholder:text-neutral-300/60",
-                            ],
-                            innerWrapper: "bg-transparent",
-                            inputWrapper: [
-                              "shadow-xl",
-                              "bg-default-200/50",
-                              "dark:bg-default/60",
-                              "backdrop-blur-xl",
-                              "backdrop-saturate-200",
-                              "hover:bg-default-200/30",
-                              "dark:hover:bg-default/30",
-                              "group-data-[focused=true]:bg-default-200/50",
-                              "dark:group-data-[focused=true]:bg-default/60",
-                              "!cursor-text",
-                            ],
-                          }}
-                        />
-                      </ModalBody>
-                      <ModalFooter>
-                        <Button
-                          color="danger"
-                          variant="faded"
-                          onClick={onClose}
-                        >
-                          Close
-                        </Button>
-                        <Button color="primary" onClick={handelMint}>
-                          Mint
-                        </Button>
-                      </ModalFooter>
-                    </>
-                  )}
-                </ModalContent>
-              </Modal>
             </div>
             <ReactPlayer
               url="https://music.youtube.com/playlist?list=PL0HcRLHfAYKAk0Dfzlgo1-OgQC-O1I9Ab&si=K1EXAE06PU-KrpsC"
